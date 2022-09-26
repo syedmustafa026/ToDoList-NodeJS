@@ -60,6 +60,7 @@ function addToDo(event) {
         checked.classList.add('check-btn', `${savedTheme}-button`);
         toDoDiv.appendChild(checked);
         // delete btn;
+        
         const deleted = document.createElement('button');
         deleted.innerHTML = '<i class="fas fa-trash"></i>';
         deleted.classList.add('delete-btn', `${savedTheme}-button`);
