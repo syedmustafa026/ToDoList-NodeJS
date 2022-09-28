@@ -45,13 +45,16 @@ function addToDo(event) {
 
         // Adding to local storage;
         savelocal(toDoInput.value);
-        console.log(toDoInput.value);
+    
         // adding to server
         axios.post(`http://localhost:3000/todo`, {
             text: toDoInput.value
         })
             .then((response) => {
-                console.log(response.data)
+                console.log("vdfvdfv",response.data.data)
+                response.data.data.map(()=>{
+
+                })
             })
             .catch((err) => console.log("err",err))
         // check btn;
