@@ -1,3 +1,4 @@
+// import "../CSS/main.css"
 // Selectors
 
 const toDoInput = document.querySelector('.todo-input');
@@ -6,7 +7,6 @@ const toDoList = document.querySelector('.todo-list');
 const standardTheme = document.querySelector('.standard-theme');
 const lightTheme = document.querySelector('.light-theme');
 const darkerTheme = document.querySelector('.darker-theme');
-
 
 // Event Listeners
 
@@ -38,36 +38,35 @@ function addToDo(event) {
         alert("You must write something!");
     }
     else {
-        // newToDo.innerText = "hey";
-        newToDo.innerText = toDoInput.value;
-        newToDo.classList.add('todo-item');
-        toDoDiv.appendChild(newToDo);
-
-        // Adding to local storage;
-        savelocal(toDoInput.value);
-    
         // adding to server
         axios.post(`http://localhost:3000/todo`, {
             text: toDoInput.value
         })
             .then((response) => {
-                console.log("vdfvdfv",response.data.data)
-                response.data.data.map(()=>{
-
+                response.data.data.map((value) => {
+                    newToDo.innerText = value;
+                    newToDo.classList.add('todo-item');
+                    toDoDiv.appendChild(newToDo);
+                    toDoDiv.appendChild(checked);
+                    toDoDiv.appendChild(deleted);
+                    //     `<div class="todo">
+                    //     <div  class="todo-item">
+                    //    <li>${value}</li></div>
+                    //     <button class="check-btn"><i class="fas fa-check"></i></button>
+                    //     <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                    //    </div>`
                 })
             })
-            .catch((err) => console.log("err",err))
+            .catch((err) => console.log("err", err))
         // check btn;
         const checked = document.createElement('button');
         checked.innerHTML = '<i class="fas fa-check"></i>';
         checked.classList.add('check-btn', `${savedTheme}-button`);
-        toDoDiv.appendChild(checked);
         // delete btn;
-        
         const deleted = document.createElement('button');
         deleted.innerHTML = '<i class="fas fa-trash"></i>';
         deleted.classList.add('delete-btn', `${savedTheme}-button`);
-        toDoDiv.appendChild(deleted);
+
 
         // Append to list;
         toDoList.appendChild(toDoDiv);
@@ -102,64 +101,43 @@ function deletecheck(event) {
     if (item.classList[0] === 'check-btn') {
         item.parentElement.classList.toggle("completed");
     }
-
-
 }
-
-
-// Saving to local storage:
-function savelocal(todo) {
-    //Check: if item/s are there;
-    let todos;
-    if (localStorage.getItem('todos') === null) {
-        todos = [];
-    }
-    else {
-        todos = JSON.parse(localStorage.getItem('todos'));
-    }
-
-    todos.push(todo);
-    localStorage.setItem('todos', JSON.stringify(todos));
-}
-
-
 
 function getTodos() {
-    //Check: if item/s are there;
-    let todos;
-    if (localStorage.getItem('todos') === null) {
-        todos = [];
-    }
-    else {
-        todos = JSON.parse(localStorage.getItem('todos'));
-    }
+    const toDoDiv = document.createElement("div");
+    toDoDiv.classList.add('todo', `${savedTheme}-todo`);
+    const newToDo = document.createElement('li');
+    // adding to server
+    axios.get(`http://localhost:3000/todos`)
+        .then((response) => {
+            console.log("todos agaya", response.data.data)
+            response.data.data.map((value) => {
+                newToDo.innerText = value;
+                newToDo.classList.add('todo-item');
+                toDoDiv.appendChild(newToDo);
+                toDoDiv.appendChild(checked);
+                toDoDiv.appendChild(deleted);
+                //     `<div class="todo">
+                //     <div  class="todo-item">
+                //    <li>${value}</li></div>
+                //     <button class="check-btn"><i class="fas fa-check"></i></button>
+                //     <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                //    </div>`
+            })
+        })
+        .catch((err) => console.log("err", err))
 
-    todos.forEach(function (todo) {
-        // toDo DIV;
-        const toDoDiv = document.createElement("div");
-        toDoDiv.classList.add("todo", `${savedTheme}-todo`);
+    // check btn;
+    const checked = document.createElement('button');
+    checked.innerHTML = '<i class="fas fa-check"></i>';
+    checked.classList.add("check-btn", `${savedTheme}-button`);
+    toDoDiv.appendChild(checked);
+    // delete btn;
+    const deleted = document.createElement('button');
+    deleted.innerHTML = '<i class="fas fa-trash"></i>';
+    deleted.classList.add("delete-btn", `${savedTheme}-button`);
+    toDoDiv.appendChild(deleted);
 
-        // Create LI
-        const newToDo = document.createElement('li');
-
-        newToDo.innerText = todo;
-        newToDo.classList.add('todo-item');
-        toDoDiv.appendChild(newToDo);
-
-        // check btn;
-        const checked = document.createElement('button');
-        checked.innerHTML = '<i class="fas fa-check"></i>';
-        checked.classList.add("check-btn", `${savedTheme}-button`);
-        toDoDiv.appendChild(checked);
-        // delete btn;
-        const deleted = document.createElement('button');
-        deleted.innerHTML = '<i class="fas fa-trash"></i>';
-        deleted.classList.add("delete-btn", `${savedTheme}-button`);
-        toDoDiv.appendChild(deleted);
-
-        // Append to list;
-        toDoList.appendChild(toDoDiv);
-    });
 }
 
 
