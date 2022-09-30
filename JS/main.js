@@ -1,4 +1,4 @@
-// import "../CSS/main.css"
+
 // Selectors
 
 const toDoInput = document.querySelector('.todo-input');
@@ -110,19 +110,14 @@ function getTodos() {
     // adding to server
     axios.get(`http://localhost:3000/todos`)
         .then((response) => {
-            console.log("todos agaya", response.data.data)
-            response.data.data.map((value) => {
-                newToDo.innerText = value;
-                newToDo.classList.add('todo-item');
-                toDoDiv.appendChild(newToDo);
-                toDoDiv.appendChild(checked);
-                toDoDiv.appendChild(deleted);
-                //     `<div class="todo">
-                //     <div  class="todo-item">
-                //    <li>${value}</li></div>
-                //     <button class="check-btn"><i class="fas fa-check"></i></button>
-                //     <button class="delete-btn"><i class="fas fa-trash"></i></button>
-                //    </div>`
+            response.data.data.map((value,id) => {
+                toDoList.innerHTML +=
+                    `<div class="todo">
+                <div  class="todo-item">
+               <li>${value}</li></div>
+                <button class="check-btn"><i class="fas fa-check"></i></button>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+               </div>`
             })
         })
         .catch((err) => console.log("err", err))
@@ -140,7 +135,11 @@ function getTodos() {
 
 }
 
-
+// POST /todo
+// GET /todos
+// GET /todo/id
+// PUT /todo/id
+// DELETE /todo/id
 function removeLocalTodos(todo) {
     //Check: if item/s are there;
     let todos;
